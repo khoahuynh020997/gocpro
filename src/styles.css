@@ -9,7 +9,20 @@
 @import "@fontsource/fraunces/vietnamese-600.css";
 @import "@fontsource/fraunces/latin-600.css";
 @import "@fontsource/fraunces/latin-700.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-400.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-500.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-600.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-700.css";
+@import "@fontsource/be-vietnam-pro/latin-400.css";
+@import "@fontsource/be-vietnam-pro/latin-500.css";
+@import "@fontsource/be-vietnam-pro/latin-600.css";
+@import "@fontsource/be-vietnam-pro/latin-700.css";
+@import "@fontsource/fraunces/vietnamese-600.css";
+@import "@fontsource/fraunces/latin-600.css";
+@import "@fontsource/fraunces/latin-700.css";
 @import "tailwindcss";
+@source "./**/*.{ts,tsx}";
+@source "../spa/**/*.{html,tsx}";
 
 @theme {
   --font-sans: "Be Vietnam Pro", "SF Pro Text", "Segoe UI", system-ui, sans-serif;

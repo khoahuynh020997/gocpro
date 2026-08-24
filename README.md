@@ -1,5 +1,7 @@
 # GốcPro — quản lý bán hàng phân bón gốc
 
+**Dùng ngay trên điện thoại / máy tính:** [khoahuynh020997.github.io/gocpro](https://khoahuynh020997.github.io/gocpro/)
+
 App bán hàng cho đại lý phân bón miền Tây: đại lý, sản phẩm, đơn hàng, vận chuyển (xe + cước) và doanh số theo tháng/năm (tấn + tiền).
 
 Dữ liệu lưu trên máy (localStorage), chạy được offline. Có sẵn dữ liệu mẫu 8 tháng 2026.
@@ -15,18 +17,12 @@ Dữ liệu lưu trên máy (localStorage), chạy được offline. Có sẵn d
 - **Doanh số** — lọc theo tháng hoặc cả năm, tính **số tấn** và **số tiền**, xuất CSV
 - **Công nợ / viếng thăm** — thu tiền, ghi chú tuyến
 
-## Chạy local
+## Chạy trên máy
 
 ```bash
 npm install
 npm run dev
 ```
-
-Mở trình duyệt tại cổng mà Vite in ra (mặc định 8080).
-
-## Stack
-
-TanStack Start + React 19 + Zustand + Tailwind v4 + Recharts.
 
 ## Ghi chú
 

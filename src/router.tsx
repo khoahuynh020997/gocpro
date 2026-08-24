@@ -1,7 +1,12 @@
-import { createRouter } from "@tanstack/react-router";
+import { createHashHistory, createRouter } from "@tanstack/react-router";
 import { AppErrorComponent } from "@/lib/error-component";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
-  return createRouter({ routeTree, defaultErrorComponent: AppErrorComponent });
+  const spa = import.meta.env.VITE_SPA === "1";
+  return createRouter({
+    routeTree,
+    history: spa ? createHashHistory() : undefined,
+    defaultErrorComponent: AppErrorComponent,
+  });
 }

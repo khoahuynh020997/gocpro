@@ -5,6 +5,8 @@ import { AppShell } from "@/components/layout/app-shell";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "GốcPro";
+const spa = import.meta.env.VITE_SPA === "1";
+const base = import.meta.env.BASE_URL;
 
 export const Route = createRootRoute({
   head: () => ({
@@ -20,26 +22,39 @@ export const Route = createRootRoute({
       { name: "apple-mobile-web-app-capable", content: "yes" },
     ],
     links: [
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/svg+xml", href: `${base}favicon.svg` },
       { rel: "stylesheet", href: appCss },
-      { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
+      { rel: "manifest", href: `${base}__grok/manifest.webmanifest` },
+      { rel: "apple-touch-icon", href: `${base}__grok/icon-180.png` },
     ],
   }),
-  component: () => (
+  component: RootComponent,
+});
+
+function Inner() {
+  return (
+    <>
+      <PreviewHostBridge />
+      <AuthProvider>
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      </AuthProvider>
+    </>
+  );
+}
+
+function RootComponent() {
+  if (spa) return <Inner />;
+  return (
     <html lang="vi" className="antialiased" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <PreviewHostBridge />
-        <AuthProvider>
-          <AppShell>
-            <Outlet />
-          </AppShell>
-        </AuthProvider>
+        <Inner />
         <Scripts />
       </body>
     </html>
-  ),
-});
+  );
+}

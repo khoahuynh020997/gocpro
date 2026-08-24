@@ -135,7 +135,7 @@ function Home() {
       ) : null}
 
       <section className="rounded-xl bg-card p-4 shadow-[var(--shadow-border)] sm:p-5">
-        <div className="mb-4 flex items-end justify-between">
+        <div className="mb-4 flex items-end justify-between gap-3 pr-16 lg:pr-0">
           <div>
             <h2 className="font-display text-xl tracking-tight">Tấn & doanh thu</h2>
             <p className="text-sm text-muted-foreground">Theo tháng · {year}</p>
