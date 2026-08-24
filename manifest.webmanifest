@@ -1,0 +1,26 @@
+{
+  "name": "GốcPro",
+  "short_name": "GốcPro",
+  "description": "Sổ bán hàng phân bón gốc — đại lý, đơn hàng, vận chuyển, thống kê tấn và doanh thu.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1C2418",
+  "theme_color": "#1C2418",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
