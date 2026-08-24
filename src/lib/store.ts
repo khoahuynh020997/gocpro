@@ -10,7 +10,7 @@ import type {
   Vehicle,
   Visit,
 } from "./types";
-import { createSeedData } from "./seed";
+import { createEmptyData } from "./seed";
 import { nowIso, uid } from "./utils";
 
 export type AppState = AppData & {
@@ -35,7 +35,7 @@ export type AppState = AppData & {
   addVisit: (input: Omit<Visit, "id">) => string;
   updateVisit: (id: string, patch: Partial<Visit>) => void;
   deleteVisit: (id: string) => void;
-  resetDemo: () => void;
+  resetData: () => void;
 };
 
 const noopStorage = {
@@ -72,12 +72,12 @@ function applyStock(
   });
 }
 
-const seed = createSeedData();
+const empty = createEmptyData();
 
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      ...seed,
+      ...empty,
       addDealer: (input) => {
         const id = uid("dl");
         set((s) => ({
@@ -209,10 +209,10 @@ export const useAppStore = create<AppState>()(
         })),
       deleteVisit: (id) =>
         set((s) => ({ visits: s.visits.filter((v) => v.id !== id) })),
-      resetDemo: () => set(() => ({ ...createSeedData() })),
+      resetData: () => set(() => ({ ...createEmptyData() })),
     }),
     {
-      name: "gocpro-v2",
+      name: "gocpro-v3",
       storage: createJSONStorage(() =>
         typeof window === "undefined" ? noopStorage : localStorage,
       ),

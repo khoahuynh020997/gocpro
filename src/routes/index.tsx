@@ -19,6 +19,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
 import { StatCard } from "@/components/stat-card";
 import { OrderStatusBadge } from "@/components/status-badge";
@@ -78,6 +79,7 @@ function Home() {
     .filter((r) => r.debt > 0)
     .sort((a, b) => b.debt - a.debt)
     .slice(0, 5);
+  const isFresh = dealers.length === 0 && products.length === 0 && orders.length === 0;
 
   return (
     <div className="grid gap-6">
@@ -91,6 +93,23 @@ function Home() {
           </Button>
         }
       />
+
+      {isFresh ? (
+        <div className="rounded-xl border border-dashed border-border bg-card px-5 py-6">
+          <p className="font-display text-xl tracking-tight">Bắt đầu sổ bán hàng</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            App đang trống. Thêm đại lý và sản phẩm trước, rồi tạo đơn hàng.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button asChild>
+              <Link to="/dealers">Thêm đại lý</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/products">Thêm sản phẩm</Link>
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard
@@ -214,41 +233,49 @@ function Home() {
               Tất cả
             </Link>
           </div>
-          <ul className="divide-y divide-border">
-            {recent.map((order) => {
-              const dealer = dealers.find((d) => d.id === order.dealerId);
-              return (
-                <li key={order.id}>
-                  <Link
-                    to="/orders/$id"
-                    params={{ id: order.id }}
-                    className="flex items-center gap-3 py-3"
-                  >
-                    <span className="flex size-9 items-center justify-center rounded-md bg-muted">
-                      <ClipboardList className="size-4 text-muted-foreground" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-2">
-                        <span className="truncate font-medium">{dealer?.name}</span>
-                        <OrderStatusBadge status={order.status} />
+          {recent.length === 0 ? (
+            <EmptyState
+              icon={<ClipboardList className="size-5" />}
+              title="Chưa có đơn hàng"
+              hint="Tạo đơn sau khi đã có đại lý và sản phẩm."
+            />
+          ) : (
+            <ul className="divide-y divide-border">
+              {recent.map((order) => {
+                const dealer = dealers.find((d) => d.id === order.dealerId);
+                return (
+                  <li key={order.id}>
+                    <Link
+                      to="/orders/$id"
+                      params={{ id: order.id }}
+                      className="flex items-center gap-3 py-3"
+                    >
+                      <span className="flex size-9 items-center justify-center rounded-md bg-muted">
+                        <ClipboardList className="size-4 text-muted-foreground" />
                       </span>
-                      <span className="block text-xs text-muted-foreground">
-                        {order.code} · {formatDate(order.createdAt)}
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-2">
+                          <span className="truncate font-medium">{dealer?.name}</span>
+                          <OrderStatusBadge status={order.status} />
+                        </span>
+                        <span className="block text-xs text-muted-foreground">
+                          {order.code} · {formatDate(order.createdAt)}
+                        </span>
                       </span>
-                    </span>
-                    <span className="text-right">
-                      <span className="block text-sm font-medium tabular-nums">
-                        {formatVndShort(orderTotal(order))}
+                      <span className="text-right">
+                        <span className="block text-sm font-medium tabular-nums">
+                          {formatVndShort(orderTotal(order))}
+                        </span>
+                        <span className="text-xs text-muted-foreground tabular-nums">
+                          {formatTons(orderTons(order, products))}
+                        </span>
                       </span>
-                      <span className="text-xs text-muted-foreground tabular-nums">
-                        {formatTons(orderTons(order, products))}
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </section>
 
         <section className="rounded-xl bg-card p-4 shadow-[var(--shadow-border)]">
@@ -258,27 +285,35 @@ function Home() {
               Sổ nợ
             </Link>
           </div>
-          <ul className="divide-y divide-border">
-            {topDebt.map((row) => (
-              <li key={row.dealer.id}>
-                <Link
-                  to="/dealers/$id"
-                  params={{ id: row.dealer.id }}
-                  className="flex items-center gap-3 py-3"
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-medium">{row.dealer.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {row.dealer.district}, {row.dealer.province}
+          {topDebt.length === 0 ? (
+            <EmptyState
+              icon={<Wallet className="size-5" />}
+              title="Chưa có công nợ"
+              hint="Công nợ hiện khi đơn đã chốt mà chưa thu đủ."
+            />
+          ) : (
+            <ul className="divide-y divide-border">
+              {topDebt.map((row) => (
+                <li key={row.dealer.id}>
+                  <Link
+                    to="/dealers/$id"
+                    params={{ id: row.dealer.id }}
+                    className="flex items-center gap-3 py-3"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate font-medium">{row.dealer.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {row.dealer.district}, {row.dealer.province}
+                      </span>
                     </span>
-                  </span>
-                  <span className="text-sm font-medium tabular-nums text-destructive">
-                    {formatVndShort(row.debt)}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    <span className="text-sm font-medium tabular-nums text-destructive">
+                      {formatVndShort(row.debt)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
 

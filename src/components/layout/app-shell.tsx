@@ -8,7 +8,7 @@ import {
   Package,
   Plus,
   RotateCcw,
-  Sprout,
+  Smartphone,
   Store,
   Truck,
   Wallet,
@@ -31,6 +31,22 @@ const MORE = [
   { to: "/visits", label: "Viếng thăm", icon: MapPin },
   { to: "/debt", label: "Công nợ", icon: Wallet },
 ] as const;
+
+function asset(path: string) {
+  const base = import.meta.env.BASE_URL ?? "/";
+  return `${base}${path.replace(/^\//, "")}`;
+}
+
+function BrandMark({ size }: { size: "sm" | "md" }) {
+  const px = size === "md" ? "size-9" : "size-8";
+  return (
+    <img
+      src={asset("icon-192.png")}
+      alt=""
+      className={cn(px, "rounded-md bg-primary object-cover")}
+    />
+  );
+}
 
 function activePath(pathname: string, to: string) {
   if (to === "/") return pathname === "/";
@@ -70,7 +86,7 @@ function NavItem({
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const resetDemo = useAppStore((s) => s.resetDemo);
+  const resetData = useAppStore((s) => s.resetData);
   const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
@@ -91,9 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-dvh bg-background text-foreground">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-border bg-card px-3 py-5 lg:flex">
         <Link to="/" className="mb-8 flex items-center gap-2.5 px-2">
-          <span className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Sprout className="size-4" strokeWidth={2} />
-          </span>
+          <BrandMark size="md" />
           <span>
             <span className="block font-display text-lg leading-none tracking-tight">
               GốcPro
@@ -112,24 +126,29 @@ export function AppShell({ children }: { children: ReactNode }) {
             <NavItem key={item.to} {...item} pathname={pathname} />
           ))}
         </nav>
+        <a
+          href={asset("install.html")}
+          className="mb-1 flex h-11 items-center gap-2 rounded-md px-3 text-left text-xs text-muted-foreground hover:bg-muted"
+        >
+          <Smartphone className="size-3.5" />
+          Cài ra màn hình iPhone
+        </a>
         <button
           type="button"
           className="mb-3 flex h-11 items-center gap-2 rounded-md px-3 text-left text-xs text-muted-foreground hover:bg-muted"
           onClick={() => {
-            if (confirm("Khôi phục dữ liệu mẫu? Thay đổi trên máy này sẽ mất.")) resetDemo();
+            if (confirm("Xóa hết dữ liệu trên máy này? Không hoàn tác được.")) resetData();
           }}
         >
           <RotateCcw className="size-3.5" />
-          Khôi phục dữ liệu mẫu
+          Xóa hết dữ liệu
         </button>
         <p className="px-3 text-[11px] text-muted-foreground">Lưu trên máy · offline</p>
       </aside>
 
       <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-background/90 px-4 backdrop-blur-sm lg:hidden">
         <Link to="/" className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-sm bg-primary text-primary-foreground">
-            <Sprout className="size-4" />
-          </span>
+          <BrandMark size="sm" />
           <span className="font-display text-lg tracking-tight">GốcPro</span>
         </Link>
         <button
@@ -174,18 +193,25 @@ export function AppShell({ children }: { children: ReactNode }) {
             {[...PRIMARY, ...MORE].map((item) => (
               <NavItem key={item.to} {...item} pathname={pathname} />
             ))}
+            <a
+              href={asset("install.html")}
+              className="mt-3 flex h-11 items-center gap-3 rounded-md px-3 text-sm text-muted-foreground hover:bg-muted"
+            >
+              <Smartphone className="size-4" />
+              Cài ra màn hình iPhone
+            </a>
             <button
               type="button"
-              className="mt-3 flex h-11 items-center gap-3 rounded-md px-3 text-sm text-muted-foreground hover:bg-muted"
+              className="flex h-11 items-center gap-3 rounded-md px-3 text-sm text-muted-foreground hover:bg-muted"
               onClick={() => {
-                if (confirm("Khôi phục dữ liệu mẫu? Thay đổi trên máy này sẽ mất.")) {
-                  resetDemo();
+                if (confirm("Xóa hết dữ liệu trên máy này? Không hoàn tác được.")) {
+                  resetData();
                   setMoreOpen(false);
                 }
               }}
             >
               <RotateCcw className="size-4" />
-              Khôi phục dữ liệu mẫu
+              Xóa hết dữ liệu
             </button>
           </div>
         </SheetContent>

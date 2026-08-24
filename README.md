@@ -4,7 +4,15 @@
 
 App bán hàng cho đại lý phân bón miền Tây: đại lý, sản phẩm, đơn hàng, vận chuyển (xe + cước) và doanh số theo tháng/năm (tấn + tiền).
 
-Dữ liệu lưu trên máy (localStorage), chạy được offline. Có sẵn dữ liệu mẫu 8 tháng 2026.
+Dữ liệu lưu trên máy (localStorage), chạy được offline. App khởi động trống — tự thêm đại lý, sản phẩm, đơn hàng.
+
+## Cài ra màn hình iPhone
+
+1. Mở Safari: [Cài GốcPro](https://khoahuynh020997.github.io/gocpro/install.html)
+2. Bấm **Cài đặt hồ sơ**
+3. Vào **Cài đặt → Hồ sơ đã tải về → Cài đặt**
+
+File hồ sơ: [gocpro.mobileconfig](https://khoahuynh020997.github.io/gocpro/gocpro.mobileconfig)
 
 ## Tính năng
 
@@ -26,4 +34,4 @@ npm run dev
 
 ## Ghi chú
 
-Nút **Khôi phục dữ liệu mẫu** trong menu sẽ ghi đè dữ liệu trên máy này.
+Nút **Xóa hết dữ liệu** trong menu sẽ xoá toàn bộ dữ liệu trên máy này.
