@@ -1,14 +1,19 @@
-# Gốc Pro
+# GốcPro — quản lý bán hàng phân bón gốc
 
-App quản lý bán hàng đại lý: sản phẩm tính theo **tấn**, đơn hàng, xe vận chuyển và báo cáo doanh số.
+App bán hàng cho đại lý phân bón miền Tây: đại lý, sản phẩm, đơn hàng, vận chuyển (xe + cước) và doanh số theo tháng/năm (tấn + tiền).
 
-## Chức năng
+Dữ liệu lưu trên máy (localStorage), chạy được offline. Có sẵn dữ liệu mẫu 8 tháng 2026.
 
-- **Đại lý** — danh sách đại lý, thêm / sửa / xoá
-- **Sản phẩm** — danh mục hàng, giá theo tấn, thêm / bớt / sửa
-- **Đơn hàng** — tạo đơn theo đại lý, chọn xe, nhập số tấn từng mặt hàng
-- **Vận chuyển** — tên xe, biển số, SĐT tài xế, tiền cước
-- **Doanh số** — theo tháng hoặc theo năm, tính **số tấn** và **số tiền**
+## Tính năng
+
+- **Đại lý** — thêm, sửa, xoá; cấp 1 / cấp 2 / nông hộ; hạn mức, công nợ
+- **Sản phẩm** — danh mục phân gốc (Urê, DAP, SA, Kali, NPK…); thêm/bớt, giá theo bao, tồn kho
+- **Đơn hàng** — tạo đơn nhiều dòng, trạng thái nháp → chốt → giao → xong
+- **Vận chuyển**
+  - Danh sách xe: tên xe, biển số, tài xế, SĐT, tải trọng
+  - Từng chuyến: gán xe, tiền cước, kho xuất, trạng thái
+- **Doanh số** — lọc theo tháng hoặc cả năm, tính **số tấn** và **số tiền**, xuất CSV
+- **Công nợ / viếng thăm** — thu tiền, ghi chú tuyến
 
 ## Chạy local
 
@@ -17,8 +22,12 @@ npm install
 npm run dev
 ```
 
-Mở [http://localhost:8080](http://localhost:8080). Dữ liệu mẫu (đại lý, sản phẩm, xe, đơn) được nạp sẵn.
+Mở trình duyệt tại cổng mà Vite in ra (mặc định 8080).
+
+## Stack
+
+TanStack Start + React 19 + Zustand + Tailwind v4 + Recharts.
 
 ## Ghi chú
 
-Doanh số **không** tính đơn đã huỷ. Tiền hàng = số tấn × đơn giá. Tiền cước xe được thống kê riêng.
+Nút **Khôi phục dữ liệu mẫu** trong menu sẽ ghi đè dữ liệu trên máy này.

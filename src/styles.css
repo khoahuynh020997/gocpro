@@ -1,43 +1,89 @@
+@import "@fontsource/be-vietnam-pro/vietnamese-400.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-500.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-600.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-700.css";
+@import "@fontsource/be-vietnam-pro/latin-400.css";
+@import "@fontsource/be-vietnam-pro/latin-500.css";
+@import "@fontsource/be-vietnam-pro/latin-600.css";
+@import "@fontsource/be-vietnam-pro/latin-700.css";
+@import "@fontsource/fraunces/vietnamese-600.css";
+@import "@fontsource/fraunces/latin-600.css";
+@import "@fontsource/fraunces/latin-700.css";
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
-  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-sans: "Be Vietnam Pro", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Fraunces", "Be Vietnam Pro", Georgia, serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 
-  --color-bg: #f3efe6;
-  --color-surface: #fbf8f1;
-  --color-surface-2: #efe9dc;
-  --color-ink: #1a1916;
-  --color-muted: #6f6a62;
-  --color-subtle: #8a847a;
-  --color-border: #ddd6c8;
-  --color-primary: #1e4d3a;
-  --color-primary-fg: #f4f1ea;
-  --color-danger: #9b3a2f;
-  --color-success: #2d6a4f;
+  --color-background: #f3efe6;
+  --color-foreground: #1a1e16;
+  --color-card: #faf8f3;
+  --color-card-foreground: #1a1e16;
+  --color-popover: #fffcf6;
+  --color-popover-foreground: #1a1e16;
+  --color-primary: #3f4f38;
+  --color-primary-foreground: #f4f1ea;
+  --color-secondary: #e7e1d4;
+  --color-secondary-foreground: #1a1e16;
+  --color-muted: #e7e1d4;
+  --color-muted-foreground: #5c6156;
+  --color-accent: #dfe6d6;
+  --color-accent-foreground: #1a1e16;
+  --color-destructive: #8b3a2a;
+  --color-destructive-foreground: #faf8f3;
+  --color-border: #d4cec0;
+  --color-input: #d4cec0;
+  --color-ring: #3f4f38;
+  --color-success: #3d5a3a;
+  --color-success-foreground: #f4f1ea;
+  --color-warn: #8a5a28;
+  --color-warn-foreground: #faf8f3;
+  --color-chart-1: #3f4f38;
+  --color-chart-2: #6b7d5e;
+  --color-chart-3: #8a9478;
+  --color-chart-4: #b7a48a;
+  --color-ink: #1c2418;
+  --color-paper: #f3efe6;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 28px;
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius: 0.75rem;
+
+  --shadow-border:
+    0 0 0 1px rgb(26 30 22 / 0.06),
+    0 1px 2px -1px rgb(26 30 22 / 0.06),
+    0 2px 8px 0 rgb(26 30 22 / 0.04);
 }
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --motion-quick: 150ms;
+    --motion-fast: 250ms;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-ink);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     font-family: var(--font-sans);
+    line-height: 1.5;
   }
 
   h1,
   h2,
   h3 {
     text-wrap: balance;
+    letter-spacing: -0.03em;
   }
 
   p {
@@ -47,6 +93,16 @@
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 }
 

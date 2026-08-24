@@ -1,229 +1,152 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Plus, Search, Store } from "lucide-react";
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
-import { AppShell } from "@/components/app-shell";
-import { Field } from "@/components/field";
+import { DealerForm, emptyDealerForm } from "@/components/dealer-form";
+import { EmptyState } from "@/components/empty-state";
+import { PageHeader } from "@/components/page-header";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Dialog } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  createDealer,
-  deleteDealer,
-  listDealers,
-  updateDealer,
-} from "@/lib/server/dealers";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Input, NativeSelect } from "@/components/ui/input";
+import { formatVndShort, LEVEL_LABEL, phoneDisplay, PROVINCES } from "@/lib/format";
+import { dealerDebt } from "@/lib/selectors";
+import { useAppStore } from "@/lib/store";
 import type { Dealer } from "@/lib/types";
 
 export const Route = createFileRoute("/dealers")({ component: DealersPage });
 
-type FormState = {
-  name: string;
-  phone: string;
-  address: string;
-  region: string;
-  notes: string;
-};
-
-const empty: FormState = {
-  name: "",
-  phone: "",
-  address: "",
-  region: "",
-  notes: "",
-};
-
 function DealersPage() {
-  const qc = useQueryClient();
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["dealers"],
-    queryFn: () => listDealers(),
-  });
+  const dealers = useAppStore((s) => s.dealers);
+  const addDealer = useAppStore((s) => s.addDealer);
+  const data = useAppStore((s) => s);
   const [q, setQ] = useState("");
-  const [editing, setEditing] = useState<Dealer | null>(null);
-  const [creating, setCreating] = useState(false);
-  const [form, setForm] = useState<FormState>(empty);
-  const [confirmId, setConfirmId] = useState<number | null>(null);
+  const [province, setProvince] = useState("all");
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState(emptyDealerForm);
 
   const filtered = useMemo(() => {
-    const s = q.trim().toLowerCase();
-    if (!s) return data;
-    return data.filter((d) =>
-      [d.name, d.phone, d.region, d.address].join(" ").toLowerCase().includes(s),
-    );
-  }, [data, q]);
-
-  const save = useMutation({
-    mutationFn: async () => {
-      if (editing) {
-        return updateDealer({ data: { id: editing.id, ...form } });
-      }
-      return createDealer({ data: form });
-    },
-    onSuccess: () => {
-      toast.success(editing ? "Đã cập nhật đại lý" : "Đã thêm đại lý");
-      setCreating(false);
-      setEditing(null);
-      void qc.invalidateQueries({ queryKey: ["dealers"] });
-    },
-    onError: (err: Error) => toast.error(err.message),
-  });
-
-  const remove = useMutation({
-    mutationFn: (id: number) => deleteDealer({ data: { id } }),
-    onSuccess: () => {
-      toast.success("Đã xoá đại lý");
-      setConfirmId(null);
-      void qc.invalidateQueries({ queryKey: ["dealers"] });
-    },
-    onError: (err: Error) => toast.error(err.message),
-  });
-
-  function openCreate() {
-    setForm(empty);
-    setEditing(null);
-    setCreating(true);
-  }
-
-  function openEdit(dealer: Dealer) {
-    setForm({
-      name: dealer.name,
-      phone: dealer.phone,
-      address: dealer.address,
-      region: dealer.region,
-      notes: dealer.notes,
+    const query = q.trim().toLowerCase();
+    return dealers.filter((d) => {
+      if (province !== "all" && d.province !== province) return false;
+      if (!query) return true;
+      return [d.name, d.owner, d.phone, d.district, d.province]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
     });
-    setCreating(false);
-    setEditing(dealer);
-  }
+  }, [dealers, q, province]);
 
   return (
-    <AppShell
-      title="Đại lý"
-      action={
-        <Button onClick={openCreate}>
-          <Plus className="size-4" />
-          Thêm đại lý
-        </Button>
-      }
-    >
-      <div className="relative mb-5 max-w-md">
-        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-subtle" />
-        <Input
-          className="pl-9"
-          placeholder="Tìm tên, điện thoại, khu vực…"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
+    <div className="grid gap-5">
+      <PageHeader
+        kicker="Mạng lưới"
+        title="Đại lý"
+        description="Danh sách đại lý, nông hộ lớn — công nợ và hạn mức."
+        action={
+          <Button onClick={() => setOpen(true)}>
+            <Plus className="size-4" />
+            Thêm đại lý
+          </Button>
+        }
+      />
+
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            className="pl-9"
+            placeholder="Tìm tên, chủ, SĐT, huyện…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </div>
+        <NativeSelect
+          className="sm:w-48"
+          value={province}
+          onChange={(e) => setProvince(e.target.value)}
+        >
+          <option value="all">Mọi tỉnh</option>
+          {PROVINCES.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </NativeSelect>
       </div>
 
-      {isLoading ? (
-        <div className="grid gap-3 md:grid-cols-2">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-36 animate-pulse rounded-xl bg-surface-2" />
-          ))}
-        </div>
-      ) : filtered.length === 0 ? (
-        <Card className="py-12 text-center text-muted">
-          Chưa có đại lý. Thêm đại lý đầu tiên để tạo đơn hàng.
-        </Card>
+      {filtered.length === 0 ? (
+        <EmptyState
+          icon={<Store className="size-5" />}
+          title="Không có đại lý"
+          hint="Thêm đại lý đầu tiên để ghi đơn."
+        />
       ) : (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid gap-3 sm:grid-cols-2">
           {filtered.map((dealer) => (
-            <Card key={dealer.id} className="flex flex-col gap-3">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h2 className="font-display text-lg font-medium">{dealer.name}</h2>
-                  <p className="text-sm text-muted">{dealer.region || "Chưa ghi khu vực"}</p>
-                </div>
-                <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" className="size-10 min-h-10" onClick={() => openEdit(dealer)} aria-label="Sửa">
-                    <Pencil className="size-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="size-10 min-h-10" onClick={() => setConfirmId(dealer.id)} aria-label="Xoá">
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
-              </div>
-              <dl className="grid gap-1 text-sm">
-                <div className="flex justify-between gap-3">
-                  <dt className="text-muted">Điện thoại</dt>
-                  <dd className="tabular-nums">{dealer.phone || "—"}</dd>
-                </div>
-                <div className="flex justify-between gap-3">
-                  <dt className="text-muted">Địa chỉ</dt>
-                  <dd className="max-w-[14rem] text-right">{dealer.address || "—"}</dd>
-                </div>
-              </dl>
-              {dealer.notes ? <p className="text-sm text-muted">{dealer.notes}</p> : null}
-            </Card>
+            <DealerCard
+              key={dealer.id}
+              dealer={dealer}
+              debt={dealerDebt(data, dealer.id)}
+            />
           ))}
-        </div>
+        </ul>
       )}
 
-      <Dialog
-        open={creating || Boolean(editing)}
-        onOpenChange={(open) => {
-          if (!open) {
-            setCreating(false);
-            setEditing(null);
-          }
-        }}
-        title={editing ? "Sửa đại lý" : "Thêm đại lý"}
-        description="Thông tin dùng khi lập đơn và báo cáo doanh số."
-      >
-        <form
-          className="flex flex-col gap-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            save.mutate();
-          }}
-        >
-          <Field label="Tên đại lý">
-            <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-          </Field>
-          <Field label="Điện thoại">
-            <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-          </Field>
-          <Field label="Khu vực">
-            <Input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} />
-          </Field>
-          <Field label="Địa chỉ">
-            <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
-          </Field>
-          <Field label="Ghi chú">
-            <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
-          </Field>
-          <Button type="submit" disabled={save.isPending}>
-            {save.isPending ? "Đang lưu…" : "Lưu"}
-          </Button>
-        </form>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent title="Thêm đại lý">
+          <DealerForm
+            value={form}
+            onChange={setForm}
+            onSubmit={() => {
+              if (!form.name.trim()) return;
+              addDealer({
+                ...form,
+                creditLimit: Number(form.creditLimit) || 0,
+              });
+              setForm(emptyDealerForm);
+              setOpen(false);
+            }}
+          />
+        </DialogContent>
       </Dialog>
+    </div>
+  );
+}
 
-      <Dialog
-        open={confirmId !== null}
-        onOpenChange={(open) => {
-          if (!open) setConfirmId(null);
-        }}
-        title="Xoá đại lý?"
-        description="Chỉ xoá được đại lý chưa có đơn hàng."
+function DealerCard({ dealer, debt }: { dealer: Dealer; debt: number }) {
+  return (
+    <li>
+      <Link
+        to="/dealers/$id"
+        params={{ id: dealer.id }}
+        className="block rounded-xl bg-card p-4 shadow-[var(--shadow-border)] transition-transform duration-150 active:scale-[0.99]"
       >
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => setConfirmId(null)}>
-            Huỷ
-          </Button>
-          <Button
-            variant="danger"
-            disabled={remove.isPending || confirmId === null}
-            onClick={() => confirmId !== null && remove.mutate(confirmId)}
-          >
-            Xoá
-          </Button>
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="truncate font-medium">{dealer.name}</p>
+            <p className="text-sm text-muted-foreground">{dealer.owner}</p>
+          </div>
+          <Badge tone={dealer.level === "cap1" ? "primary" : "muted"}>
+            {LEVEL_LABEL[dealer.level]}
+          </Badge>
         </div>
-      </Dialog>
-    </AppShell>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {dealer.district}, {dealer.province}
+        </p>
+        <p className="text-sm">{phoneDisplay(dealer.phone)}</p>
+        <div className="mt-3 flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">Công nợ</span>
+          <span
+            className={
+              debt > 0
+                ? "font-medium tabular-nums text-destructive"
+                : "tabular-nums text-success"
+            }
+          >
+            {formatVndShort(debt)}
+          </span>
+        </div>
+      </Link>
+    </li>
   );
 }

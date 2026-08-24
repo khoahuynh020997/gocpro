@@ -11,13 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DealersRouteImport } from './routes/dealers'
+import { Route as DebtRouteImport } from './routes/debt'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as ProductsRouteImport } from './routes/products'
-import { Route as SalesRouteImport } from './routes/sales'
-import { Route as VehiclesRouteImport } from './routes/vehicles'
-import { Route as OrdersIndexRouteImport } from './routes/orders.index'
-import { Route as OrdersIdRouteImport } from './routes/orders.$id'
-import { Route as OrdersNewRouteImport } from './routes/orders.new'
+import { Route as ShippingRouteImport } from './routes/shipping'
+import { Route as StatsRouteImport } from './routes/stats'
+import { Route as VisitsRouteImport } from './routes/visits'
+import { Route as DealersIdRouteImport } from './routes/dealers_.$id'
+import { Route as OrdersIdRouteImport } from './routes/orders_.$id'
+import { Route as OrdersNewRouteImport } from './routes/orders_.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const DealersRoute = DealersRouteImport.update({
   id: '/dealers',
   path: '/dealers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DebtRoute = DebtRouteImport.update({
+  id: '/debt',
+  path: '/debt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersRoute = OrdersRouteImport.update({
@@ -39,107 +46,131 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SalesRoute = SalesRouteImport.update({
-  id: '/sales',
-  path: '/sales',
+const ShippingRoute = ShippingRouteImport.update({
+  id: '/shipping',
+  path: '/shipping',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VehiclesRoute = VehiclesRouteImport.update({
-  id: '/vehicles',
-  path: '/vehicles',
+const StatsRoute = StatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OrdersIndexRoute = OrdersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => OrdersRoute,
+const VisitsRoute = VisitsRouteImport.update({
+  id: '/visits',
+  path: '/visits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DealersIdRoute = DealersIdRouteImport.update({
+  id: '/dealers_/$id',
+  path: '/dealers/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersIdRoute = OrdersIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => OrdersRoute,
+  id: '/orders_/$id',
+  path: '/orders/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersNewRoute = OrdersNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => OrdersRoute,
+  id: '/orders_/new',
+  path: '/orders/new',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dealers': typeof DealersRoute
-  '/orders': typeof OrdersRouteWithChildren
+  '/debt': typeof DebtRoute
+  '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
-  '/sales': typeof SalesRoute
-  '/vehicles': typeof VehiclesRoute
+  '/shipping': typeof ShippingRoute
+  '/stats': typeof StatsRoute
+  '/visits': typeof VisitsRoute
+  '/dealers/$id': typeof DealersIdRoute
   '/orders/$id': typeof OrdersIdRoute
   '/orders/new': typeof OrdersNewRoute
-  '/orders/': typeof OrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dealers': typeof DealersRoute
+  '/debt': typeof DebtRoute
+  '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
-  '/sales': typeof SalesRoute
-  '/vehicles': typeof VehiclesRoute
+  '/shipping': typeof ShippingRoute
+  '/stats': typeof StatsRoute
+  '/visits': typeof VisitsRoute
+  '/dealers/$id': typeof DealersIdRoute
   '/orders/$id': typeof OrdersIdRoute
   '/orders/new': typeof OrdersNewRoute
-  '/orders': typeof OrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dealers': typeof DealersRoute
-  '/orders': typeof OrdersRouteWithChildren
+  '/debt': typeof DebtRoute
+  '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
-  '/sales': typeof SalesRoute
-  '/vehicles': typeof VehiclesRoute
-  '/orders/$id': typeof OrdersIdRoute
-  '/orders/new': typeof OrdersNewRoute
-  '/orders/': typeof OrdersIndexRoute
+  '/shipping': typeof ShippingRoute
+  '/stats': typeof StatsRoute
+  '/visits': typeof VisitsRoute
+  '/dealers_/$id': typeof DealersIdRoute
+  '/orders_/$id': typeof OrdersIdRoute
+  '/orders_/new': typeof OrdersNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dealers'
+    | '/debt'
     | '/orders'
     | '/products'
-    | '/sales'
-    | '/vehicles'
+    | '/shipping'
+    | '/stats'
+    | '/visits'
+    | '/dealers/$id'
     | '/orders/$id'
     | '/orders/new'
-    | '/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dealers'
+    | '/debt'
+    | '/orders'
     | '/products'
-    | '/sales'
-    | '/vehicles'
+    | '/shipping'
+    | '/stats'
+    | '/visits'
+    | '/dealers/$id'
     | '/orders/$id'
     | '/orders/new'
-    | '/orders'
   id:
     | '__root__'
     | '/'
     | '/dealers'
+    | '/debt'
     | '/orders'
     | '/products'
-    | '/sales'
-    | '/vehicles'
-    | '/orders/$id'
-    | '/orders/new'
-    | '/orders/'
+    | '/shipping'
+    | '/stats'
+    | '/visits'
+    | '/dealers_/$id'
+    | '/orders_/$id'
+    | '/orders_/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DealersRoute: typeof DealersRoute
-  OrdersRoute: typeof OrdersRouteWithChildren
+  DebtRoute: typeof DebtRoute
+  OrdersRoute: typeof OrdersRoute
   ProductsRoute: typeof ProductsRoute
-  SalesRoute: typeof SalesRoute
-  VehiclesRoute: typeof VehiclesRoute
+  ShippingRoute: typeof ShippingRoute
+  StatsRoute: typeof StatsRoute
+  VisitsRoute: typeof VisitsRoute
+  DealersIdRoute: typeof DealersIdRoute
+  OrdersIdRoute: typeof OrdersIdRoute
+  OrdersNewRoute: typeof OrdersNewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -158,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DealersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/debt': {
+      id: '/debt'
+      path: '/debt'
+      fullPath: '/debt'
+      preLoaderRoute: typeof DebtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/orders': {
       id: '/orders'
       path: '/orders'
@@ -172,66 +210,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sales': {
-      id: '/sales'
-      path: '/sales'
-      fullPath: '/sales'
-      preLoaderRoute: typeof SalesRouteImport
+    '/shipping': {
+      id: '/shipping'
+      path: '/shipping'
+      fullPath: '/shipping'
+      preLoaderRoute: typeof ShippingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/vehicles': {
-      id: '/vehicles'
-      path: '/vehicles'
-      fullPath: '/vehicles'
-      preLoaderRoute: typeof VehiclesRouteImport
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/orders/': {
-      id: '/orders/'
-      path: '/'
-      fullPath: '/orders/'
-      preLoaderRoute: typeof OrdersIndexRouteImport
-      parentRoute: typeof OrdersRoute
+    '/visits': {
+      id: '/visits'
+      path: '/visits'
+      fullPath: '/visits'
+      preLoaderRoute: typeof VisitsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/orders/$id': {
-      id: '/orders/$id'
-      path: '/$id'
+    '/dealers_/$id': {
+      id: '/dealers_/$id'
+      path: '/dealers/$id'
+      fullPath: '/dealers/$id'
+      preLoaderRoute: typeof DealersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orders_/$id': {
+      id: '/orders_/$id'
+      path: '/orders/$id'
       fullPath: '/orders/$id'
       preLoaderRoute: typeof OrdersIdRouteImport
-      parentRoute: typeof OrdersRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/orders/new': {
-      id: '/orders/new'
-      path: '/new'
+    '/orders_/new': {
+      id: '/orders_/new'
+      path: '/orders/new'
       fullPath: '/orders/new'
       preLoaderRoute: typeof OrdersNewRouteImport
-      parentRoute: typeof OrdersRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface OrdersRouteChildren {
-  OrdersIdRoute: typeof OrdersIdRoute
-  OrdersNewRoute: typeof OrdersNewRoute
-  OrdersIndexRoute: typeof OrdersIndexRoute
-}
-
-const OrdersRouteChildren: OrdersRouteChildren = {
-  OrdersIdRoute: OrdersIdRoute,
-  OrdersNewRoute: OrdersNewRoute,
-  OrdersIndexRoute: OrdersIndexRoute,
-}
-
-const OrdersRouteWithChildren =
-  OrdersRoute._addFileChildren(OrdersRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DealersRoute: DealersRoute,
-  OrdersRoute: OrdersRouteWithChildren,
+  DebtRoute: DebtRoute,
+  OrdersRoute: OrdersRoute,
   ProductsRoute: ProductsRoute,
-  SalesRoute: SalesRoute,
-  VehiclesRoute: VehiclesRoute,
+  ShippingRoute: ShippingRoute,
+  StatsRoute: StatsRoute,
+  VisitsRoute: VisitsRoute,
+  DealersIdRoute: DealersIdRoute,
+  OrdersIdRoute: OrdersIdRoute,
+  OrdersNewRoute: OrdersNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,31 +1,26 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import type { OrderStatus } from "@/lib/types";
 
-const statusClass: Record<OrderStatus, string> = {
-  moi: "bg-surface-2 text-ink",
-  dang_giao: "bg-primary/10 text-primary",
-  hoan_thanh: "bg-success/12 text-success",
-  huy: "bg-danger/10 text-danger",
-};
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium tracking-wide",
+  {
+    variants: {
+      tone: {
+        muted: "bg-muted text-muted-foreground",
+        primary: "bg-primary/10 text-primary",
+        success: "bg-success/12 text-success",
+        warn: "bg-warn/12 text-warn",
+        danger: "bg-destructive/12 text-destructive",
+      },
+    },
+    defaultVariants: { tone: "muted" },
+  },
+);
 
 export function Badge({
-  status,
-  children,
   className,
-}: {
-  status?: OrderStatus;
-  children: string;
-  className?: string;
-}) {
-  return (
-    <span
-      className={cn(
-        "inline-flex h-7 items-center rounded-full px-2.5 text-xs font-medium",
-        status ? statusClass[status] : "bg-surface-2 text-muted",
-        className,
-      )}
-    >
-      {children}
-    </span>
-  );
+  tone,
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement> & VariantProps<typeof badgeVariants>) {
+  return <span className={cn(badgeVariants({ tone, className }))} {...props} />;
 }
