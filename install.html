@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1C2418" />
+    <title>Cài GốcPro lên iPhone</title>
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="./icon-192.png" />
+    <style>
+      :root {
+        --bg: #1c2418;
+        --card: #f3efe6;
+        --ink: #1c2418;
+        --muted: #5c6456;
+        --accent: #3d6b2f;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px 48px;
+      }
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--card);
+        color: var(--ink);
+        border-radius: 20px;
+        padding: 28px 24px 24px;
+        text-align: center;
+      }
+      img.logo {
+        width: 96px;
+        height: 96px;
+        border-radius: 22px;
+        box-shadow: 0 8px 24px rgba(28, 36, 24, 0.18);
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin: 16px 0 6px;
+        letter-spacing: -0.03em;
+      }
+      p.lead {
+        margin: 0 0 20px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+      ol {
+        text-align: left;
+        margin: 0 0 22px;
+        padding-left: 1.2rem;
+        color: var(--ink);
+        line-height: 1.55;
+        font-size: 0.95rem;
+      }
+      ol li { margin: 8px 0; }
+      a.btn {
+        display: block;
+        background: var(--bg);
+        color: var(--card);
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 14px 16px;
+        font-size: 1rem;
+      }
+      a.btn:active { opacity: 0.85; }
+      p.note {
+        margin: 14px 0 0;
+        font-size: 0.8rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      a.back {
+        display: inline-block;
+        margin-top: 16px;
+        color: var(--accent);
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <img class="logo" src="./icon-192.png" alt="GốcPro" />
+      <h1>Cài GốcPro</h1>
+      <p class="lead">Thêm icon ra màn hình chính iPhone / iPad — mở app toàn màn hình, không cần App Store.</p>
+      <ol>
+        <li>Mở trang này bằng <strong>Safari</strong> (không dùng Chrome).</li>
+        <li>Bấm nút <strong>Cài đặt hồ sơ</strong> bên dưới.</li>
+        <li>Vào <strong>Cài đặt → Hồ sơ đã tải về → Cài đặt</strong>.</li>
+        <li>Icon GốcPro sẽ hiện trên màn hình chính.</li>
+      </ol>
+      <a class="btn" href="./gocpro.mobileconfig">Cài đặt hồ sơ</a>
+      <p class="note">iOS sẽ hỏi xác nhận. Hồ sơ chỉ thêm lối tắt web, không đọc dữ liệu máy.</p>
+      <a class="back" href="./">← Quay lại app</a>
+    </main>
+  </body>
+</html>
